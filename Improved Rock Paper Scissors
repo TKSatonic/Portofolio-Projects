@@ -13,12 +13,13 @@
   <div id="result"></div>
   <div id="number"></div> <script>
     function play(playerMove) {
-      const randomNumber = Math.random();
+      const randomNumber = Math.random(); 
+      "Maths.random is used as without defining anything it only gives values between 0 and 1 hence there is a 1/3 chance per option"
       const computerMove = getComputerMove(randomNumber);
       const result = getResult(playerMove, computerMove);
 
       document.getElementById('result').textContent = `You picked ${playerMove}. Computer picked ${computerMove}. ${result}`;
-      document.getElementById('number').textContent = `The number generated was ${randomNumber}`; // 
+      document.getElementById('number').textContent = `The number generated was ${randomNumber}`; // Text conent displays a message via HTML on the screen
     }
 
     function getComputerMove(randomNumber) {
@@ -40,7 +41,7 @@
       } else if (playerMove === 'paper') {
         return computerMove === 'rock' ? 'You Win!' : 'You Lose!';
       } else if (playerMove === 'scissors') {
-        return computerMove === 'paper' ? 'You Win!' : 'You Lose!';
+        return computerMove === 'paper' ? 'You Win!' : 'You Lose!'; //The ? is an If true of If false statement simplified, whatever is first is the outcome for if the statement is true.
       }
     }
   </script>
