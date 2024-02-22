@@ -119,7 +119,6 @@ const keys = {
     pressed: false
   }
 }
-
 function rectangularCollision({ rectangle1, rectangle2 }) {
   return (
     rectangle1.attackBox.position.x + rectangle1.attackBox.width
@@ -130,6 +129,41 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
     <= rectangle2.position.y + rectangle2.height
   )
 }
+/*Will determine the winner based on Health and by using the timerId and
+the clearTimeout it will stop the timer once the HP reaches 0*/
+function determineWinner({player, enemy, timerId}) {
+  clearTimeout(timerId)
+  document.querySelector('#displayText').style.display = 'flex' 
+  if (player.health === enemy.health){
+    document.querySelector('#displayText').innerHTML = 'Tie'
+    }
+  else if (player.health > enemy.health){
+    document.querySelector('#displayText').innerHTML = 'You Win'
+    }
+  else {
+    document.querySelector('#displayText').innerHTML = 'You Lose'   
+    }
+}
+/*
+Uses the timer placeholder from the doc.html to create a timer counting down in
+that position, and once the timer ends, if neither side has been defeated, 
+depending on the HP remaining on both sides either, player 1 wins, loses or ties.
+*/
+let timer = 90
+let timerId
+function countDown() {
+  timerId = setTimeout(countDown, 1000)
+  if (timer > 0)
+  { timer --
+    document.querySelector('#timer').innerHTML = timer
+} if (timer === 0) {
+  determineWinner({player, enemy, timerId})
+}
+}
+countDown()
+
+
+
 
 function animation() {
   //defines a function named animation that can be called
@@ -165,6 +199,9 @@ function animation() {
  /*
  Making sure the hitboxes work, 
  hitboxes are rectangular and need to collide with the models to work
+ Each successful attack makes the bar decrease by 20% for either the 1st player
+ or their opponents and will then show the winner by calling the determinWinner
+ function
  */
  if (
   rectangularCollision({
@@ -189,6 +226,9 @@ if (
   player.health -=20
   document.querySelector('#playerhealth').style.width = player.health + '%'
 }
+  if (enemy.health <= 0 || player.health <= 0) {
+    determineWinner({player, enemy, timerId})
+  }
 }
 
 animation() //calls in the animation function
@@ -224,6 +264,9 @@ window.addEventListener('keydown', (event) => {
       break
     case 'ArrowDown':
       enemy.attack()
+      break
+    case 'z':
+      keys.z.pressed = true
       break
   }
 })
