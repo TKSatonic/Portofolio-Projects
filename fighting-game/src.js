@@ -10,22 +10,49 @@ c.fillRect(0, 0, canvas.width, canvas.height)
 const gravity = 0.7
 //object speed when falling without help
 
+//Character Models created via the Class attribute
 class Models {
-constructor({position, velocity}) {
+constructor({position, velocity, colour = 'blue', offset}) {
   this.position = position 
   this.velocity = velocity
-  this.height = 100
+  this.width = 50
+  this.height = 113
   this.lastKey
+  this.attackBox = {
+    position: {
+    x: this.position.x,
+    y: this.position.y
+    },
+    offset, 
+    width: 100,
+    height: 50,
+  }
+  this.colour = colour
+  this.isAttacking 
 }
-//Character Models created via the Class attribute
+
+
 picture() {
-  c.fillStyle = 'blue'
-  c.fillRect(this.position.x, this.position.y, 35, this.height)
+  c.fillStyle = this.colour
+  c.fillRect(this.position.x, this.position.y, this.width, this.height)
+
+  //atack box that only activates when the attack argument is called/true
+  if (this.isAttacking){
+
+   
+  c.fillStyle = 'red'
+  c.fillRect(this.attackBox.position.x, this.attackBox.position.y, 
+    this.attackBox.width, this.attackBox.height)
 }
+}
+
+
 //the above lines will be run whenever picture() is called
 update() {
   this.picture()
-  
+  this.attackBox.position.x = this.position.x + this.attackBox.offset.x
+  this.attackBox.position.y = this.position.y
+
   this.position.x += this.velocity.x
   this.position.y += this.velocity.y
   
@@ -36,6 +63,13 @@ update() {
   else
   this.velocity.y += gravity
   }
+
+attack() {
+  this.isAttacking = true
+  setTimeout(() => {
+    this.isAttacking = false
+}, 100)
+}
 }
 
 const player = new Models({
@@ -46,17 +80,27 @@ const player = new Models({
 velocity: {
   x: 0,
   y: 0
+},
+offset:
+{
+  x: 0,
+  y: 0
 }
 })
 const enemy = new Models({
  position: {
   x: 450,
-  y: 476
+  y: 450
  },
  velocity: {
   x: 0,
   y: 0
-}
+},
+offset: {
+  x: -50,
+  y: 0
+},
+  colour: 'green'
 })
 console.log(player)
 
@@ -115,7 +159,19 @@ if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
 } if (keys.ArrowUp.pressed) {
   enemy.velocity.y = -10
 }
-
+  //detect the collision box
+  if 
+  (player.attackBox.position.x + player.attackBox.width 
+    >= enemy.position.x && player.attackBox.position.x 
+    <= enemy.position.x + enemy.width && 
+    player.attackBox.position.y + player.attackBox.height 
+    >= enemy.position.y && player.attackBox.position.y 
+    <= enemy.position.y + enemy.height &&
+    player.isAttacking
+    ){
+      player.isAttacking = false
+  console.log('atk')
+    }
 }
 
 animation() //calls in the animation function
@@ -137,6 +193,10 @@ window.addEventListener('keydown', (event) => {
       player.lastKey = 'w'
     break
 
+    case ' ':
+      player.attack()
+    break
+
     case 'ArrowUp':
       keys.ArrowUp.pressed = true
       enemy.lastKey = 'ArrowUp'
@@ -152,7 +212,9 @@ window.addEventListener('keydown', (event) => {
       enemy.lastKey = 'ArrowRight'
     break
     
-   
+    case 'ArrowDown':
+      enemy.attack()
+    break
   }
 })
 
