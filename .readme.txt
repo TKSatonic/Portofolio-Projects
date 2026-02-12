@@ -1,0 +1,20 @@
+***Native AOT Compatibility***
+Implemented System.Text.Json & Serialization so I could read and write from .json as well as allowing generation via a JsonSerializerContext, and wrapping under a class so that it can be called in main. This allows compatibility with Native AOT Compilation:
+***Build & Runtime Config***
+Edited Metadata under the .csproj file to allow it to be ran with just f5 in vscode instead of needing to go into the terminal and use dotnet run. This occurs by syncing the .jsons properly to the original folder by using CopyToOutputDirectory. (Makes it easier to run).
+***Multi Dynamic Layering***
+Utilised multiple different independent files which can interact with one another to pull data from (2 .cs files, 2 .json files) to give it a cleaner look and easier/more professional readability. 
+
+###How to run:
+*Clone* the repo.
+*Open* the folder in VSCode/pref IDE.
+*Build and run* either with the shortcut F5 or via terminal with dotnet run
+***Manually configured to handle JSON files automatically because I find it more preferable to click F5 than to go into terminal and then use a console***
+
+-Challenges Encountered: (First c# project/Still studying C#):
+I used this type of build and runtime config because I could not run it via f5 originally so i searched up how to add the path dynamics to my .json files and found out i needed to go into my .csproj and use None Update = <filename.json> CopyToOutputDirectory Preserve Newest copytooutputdirectory and then wrap it up. As well as how im using native AOT hence the normal .json method didnt work so I had to find out how to fix it and i found out that i needed to make a class loader with a serializeroptions and to resolve it there and then return the data to work, and then use the jsonserializabletypeof at the end.
+
+Before I made the edit under the .csproj I was forced to run it via CLI, to resolve that I searched for what caused it, was an error with path locations not being able to find the .json files to read, hence I searched up how to fix this which is where I found out I had to use None Update = <name.json>.
+I use a Native AOT build which meant that the original method of accessing data from a .json doesn't work for me hence I researched how to allow data to be read from the .json with an AOT which resulted in me making a class loader with serializeroptions and having a JsonSerializable typeof<class Name> to make into a function to pass into main for it to work.
+
+Originally project only ran via CLI dotnet run, resolved via learning that JSON files were not copied to output directory hence manually updated it to do so in the .csproj files, did this with none update <name.json>, to fix my issues with native AOT build I had to change from using reflect to manually using a JsonSerializable<type> to then pass through.

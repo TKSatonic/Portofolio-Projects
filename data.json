@@ -1,0 +1,12 @@
+{
+    "Mob" : {
+        "Health" : 100,
+        "Atk" : 50,
+        "Def" : 30
+    },
+    "Player" : {
+        "Health_Base" : 50,
+        "Def_Base" : 10,
+        "Atk_Base" : 100
+    }
+}
