@@ -17,4 +17,7 @@ I used this type of build and runtime config because I could not run it via f5 o
 Before I made the edit under the .csproj I was forced to run it via CLI, to resolve that I searched for what caused it, was an error with path locations not being able to find the .json files to read, hence I searched up how to fix this which is where I found out I had to use None Update = <name.json>.
 I use a Native AOT build which meant that the original method of accessing data from a .json doesn't work for me hence I researched how to allow data to be read from the .json with an AOT which resulted in me making a class loader with serializeroptions and having a JsonSerializable typeof<class Name> to make into a function to pass into main for it to work.
 
+
 Originally project only ran via CLI dotnet run, resolved via learning that JSON files were not copied to output directory hence manually updated it to do so in the .csproj files, did this with none update <name.json>, to fix my issues with native AOT build I had to change from using reflect to manually using a JsonSerializable<type> to then pass through.
+
+Syntax -- Foundational: This project was built in my first week of studying C#. This required me to reference documentation to ensure correct syntax and structure as well as to improve understanding of the logic behind the language.
